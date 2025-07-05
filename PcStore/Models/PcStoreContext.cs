@@ -17,27 +17,30 @@ public partial class PcStoreContext : DbContext
 
     public virtual DbSet<Producto> Productos { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder){ }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { 
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Producto>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("productos");
+            entity.HasKey(e => e.IdProducto).HasName("PK__producto__07F4A132A90FB764");
 
+            entity.ToTable("productos");
+
+            entity.Property(e => e.IdProducto).HasColumnName("idProducto");
             entity.Property(e => e.Categoria)
                 .HasMaxLength(20)
-                .IsUnicode(false)
                 .HasColumnName("categoria");
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(120)
-                .IsUnicode(false)
                 .HasColumnName("descripcion");
+            entity.Property(e => e.FechaCreacion)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("fecha_creacion");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(40)
-                .IsUnicode(false)
                 .HasColumnName("nombre");
             entity.Property(e => e.Precio).HasColumnName("precio");
             entity.Property(e => e.UrlImagen)
